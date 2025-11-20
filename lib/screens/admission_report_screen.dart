@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'admission_report_result_screen.dart';
 
 class AdmissionReportScreen extends StatefulWidget {
   const AdmissionReportScreen({super.key});
@@ -200,10 +201,10 @@ class _AdmissionReportScreenState extends State<AdmissionReportScreen> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Generating Report...'),
-                        behavior: SnackBarBehavior.floating,
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AdmissionReportResultScreen(),
                       ),
                     );
                   }
