@@ -180,6 +180,11 @@ class _LandingPageState extends State<LandingPage>
       return _buildAcademicsContent();
     }
     
+    // Show faculty features when Faculty is selected
+    if (_selectedIndex == 2) {
+      return _buildFacultyContent();
+    }
+    
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -459,6 +464,135 @@ class _LandingPageState extends State<LandingPage>
                   itemBuilder: (context, index) {
                     return _buildAdmissionFeatureCard(
                       academicFeatures[index],
+                      index,
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFacultyContent() {
+    final facultyFeatures = [
+      AdmissionFeature(
+        title: 'Faculty Leisure',
+        description: 'Track faculty free periods',
+        icon: Icons.free_breakfast_rounded,
+        color: const Color(0xFF06b6d4),
+      ),
+      AdmissionFeature(
+        title: 'Faculty Timetable',
+        description: 'Manage faculty schedules',
+        icon: Icons.schedule_rounded,
+        color: const Color(0xFF8b5cf6),
+      ),
+      AdmissionFeature(
+        title: 'Faculty Adjustments',
+        description: 'Handle schedule changes',
+        icon: Icons.swap_horiz_rounded,
+        color: const Color(0xFFf59e0b),
+      ),
+    ];
+
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            const Color(0xFFF8FAFC),
+            Colors.white,
+            const Color(0xFFF1F5F9),
+          ],
+        ),
+      ),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(40),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Section Header
+            FadeTransition(
+              opacity: _animationController,
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF8b5cf6), Color(0xFF06b6d4)],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF8b5cf6).withValues(alpha: 0.3),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.people_rounded,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Faculty',
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1a1f3a),
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Manage faculty schedules and adjustments',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey.shade600,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 36),
+            // Feature Cards Grid
+            LayoutBuilder(
+              builder: (context, constraints) {
+                // Calculate number of columns based on available width
+                int crossAxisCount = 4;
+                if (constraints.maxWidth < 1200) crossAxisCount = 3;
+                if (constraints.maxWidth < 900) crossAxisCount = 2;
+                if (constraints.maxWidth < 600) crossAxisCount = 1;
+
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: 1.6,
+                  ),
+                  itemCount: facultyFeatures.length,
+                  itemBuilder: (context, index) {
+                    return _buildAdmissionFeatureCard(
+                      facultyFeatures[index],
                       index,
                     );
                   },
