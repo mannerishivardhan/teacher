@@ -67,7 +67,9 @@ class _LandingPageState extends State<LandingPage>
           // Menu Bar
           _buildMenuBar(),
           // Content
-          
+          Expanded(
+            child: _buildContent(),
+          ),
         ],
       ),
     );
@@ -168,6 +170,11 @@ class _LandingPageState extends State<LandingPage>
   }
 
   Widget _buildContent() {
+    // Show admissions features when Admissions is selected
+    if (_selectedIndex == 0) {
+      return _buildAdmissionsContent();
+    }
+    
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -179,6 +186,300 @@ class _LandingPageState extends State<LandingPage>
           // Feature Cards
           // _buildFeatureCards(),
         ],
+      ),
+    );
+  }
+
+  Widget _buildAdmissionsContent() {
+    final admissionFeatures = [
+      AdmissionFeature(
+        title: 'New Admission',
+        description: 'Register new students',
+        icon: Icons.person_add_rounded,
+        color: const Color(0xFF6366f1),
+      ),
+      AdmissionFeature(
+        title: 'Admission Report',
+        description: 'View statistics & reports',
+        icon: Icons.assessment_rounded,
+        color: const Color(0xFF8b5cf6),
+      ),
+      AdmissionFeature(
+        title: 'College Strength',
+        description: 'Monitor enrollment',
+        icon: Icons.groups_rounded,
+        color: const Color(0xFF06b6d4),
+      ),
+      AdmissionFeature(
+        title: 'Detained Students',
+        description: 'Track detained records',
+        icon: Icons.warning_rounded,
+        color: const Color(0xFFf59e0b),
+      ),
+    ];
+
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            const Color(0xFFF8FAFC),
+            Colors.white,
+            const Color(0xFFF1F5F9),
+          ],
+        ),
+      ),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(40),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Section Header
+            FadeTransition(
+              opacity: _animationController,
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF6366f1), Color(0xFF8b5cf6)],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF6366f1).withValues(alpha: 0.3),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.school_rounded,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Admissions',
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1a1f3a),
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Manage student admissions and enrollment',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey.shade600,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 36),
+            // Feature Cards Grid
+            LayoutBuilder(
+              builder: (context, constraints) {
+                // Calculate number of columns based on available width
+                int crossAxisCount = 4;
+                if (constraints.maxWidth < 1200) crossAxisCount = 3;
+                if (constraints.maxWidth < 900) crossAxisCount = 2;
+                if (constraints.maxWidth < 600) crossAxisCount = 1;
+
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: 1.6,
+                  ),
+                  itemCount: admissionFeatures.length,
+                  itemBuilder: (context, index) {
+                    return _buildAdmissionFeatureCard(
+                      admissionFeatures[index],
+                      index,
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAdmissionFeatureCard(AdmissionFeature feature, int index) {
+    final delay = index * 0.1;
+
+    return FadeTransition(
+      opacity: CurvedAnimation(
+        parent: _animationController,
+        curve: Interval(
+          0.2 + delay,
+          0.7 + delay,
+          curve: Curves.easeOut,
+        ),
+      ),
+      child: SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0, 0.3),
+          end: Offset.zero,
+        ).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Interval(
+              0.2 + delay,
+              0.7 + delay,
+              curve: Curves.easeOut,
+            ),
+          ),
+        ),
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white,
+                  Colors.white.withValues(alpha: 0.9),
+                ],
+              ),
+              border: Border.all(
+                color: feature.color.withValues(alpha: 0.1),
+                width: 1.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: feature.color.withValues(alpha: 0.08),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                  spreadRadius: -4,
+                ),
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Opening ${feature.title}...'),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        backgroundColor: feature.color,
+                        duration: const Duration(seconds: 2),
+                      ),
+                    );
+                  },
+                  splashColor: feature.color.withValues(alpha: 0.1),
+                  highlightColor: feature.color.withValues(alpha: 0.05),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          feature.color.withValues(alpha: 0.02),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Icon Container with enhanced design
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                feature.color.withValues(alpha: 0.15),
+                                feature.color.withValues(alpha: 0.08),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: feature.color.withValues(alpha: 0.2),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Icon(
+                            feature.icon,
+                            size: 28,
+                            color: feature.color,
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        // Title
+                        Text(
+                          feature.title,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF1a1f3a),
+                            height: 1.2,
+                            letterSpacing: -0.3,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 6),
+                        // Description
+                        Text(
+                          feature.description,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey.shade600,
+                            height: 1.3,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -390,4 +691,18 @@ class MenuItem {
   final IconData icon;
 
   MenuItem({required this.title, required this.icon});
+}
+
+class AdmissionFeature {
+  final String title;
+  final String description;
+  final IconData icon;
+  final Color color;
+
+  AdmissionFeature({
+    required this.title,
+    required this.description,
+    required this.icon,
+    required this.color,
+  });
 }
