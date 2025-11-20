@@ -67,9 +67,7 @@ class _LandingPageState extends State<LandingPage>
           // Menu Bar
           _buildMenuBar(),
           // Content
-          Expanded(
-            child: _buildContent(),
-          ),
+          
         ],
       ),
     );
@@ -179,7 +177,7 @@ class _LandingPageState extends State<LandingPage>
           _buildHeroSection(),
           const SizedBox(height: 40),
           // Feature Cards
-          _buildFeatureCards(),
+          // _buildFeatureCards(),
         ],
       ),
     );
