@@ -175,6 +175,11 @@ class _LandingPageState extends State<LandingPage>
       return _buildAdmissionsContent();
     }
     
+    // Show academics features when Academics is selected
+    if (_selectedIndex == 1) {
+      return _buildAcademicsContent();
+    }
+    
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -313,6 +318,147 @@ class _LandingPageState extends State<LandingPage>
                   itemBuilder: (context, index) {
                     return _buildAdmissionFeatureCard(
                       admissionFeatures[index],
+                      index,
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAcademicsContent() {
+    final academicFeatures = [
+      AdmissionFeature(
+        title: 'Attendance',
+        description: 'Mark and track student attendance',
+        icon: Icons.how_to_reg_rounded,
+        color: const Color(0xFF10b981),
+      ),
+      AdmissionFeature(
+        title: 'Timetable',
+        description: 'Manage class schedules',
+        icon: Icons.calendar_month_rounded,
+        color: const Color(0xFF6366f1),
+      ),
+      AdmissionFeature(
+        title: 'Daily Absentees',
+        description: 'View daily absent students',
+        icon: Icons.person_off_rounded,
+        color: const Color(0xFFef4444),
+      ),
+      AdmissionFeature(
+        title: 'Day Attendance',
+        description: 'Check day-wise attendance',
+        icon: Icons.today_rounded,
+        color: const Color(0xFF8b5cf6),
+      ),
+      AdmissionFeature(
+        title: 'Shortage Check',
+        description: 'Monitor attendance shortage',
+        icon: Icons.warning_amber_rounded,
+        color: const Color(0xFFf59e0b),
+      ),
+    ];
+
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            const Color(0xFFF8FAFC),
+            Colors.white,
+            const Color(0xFFF1F5F9),
+          ],
+        ),
+      ),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(40),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Section Header
+            FadeTransition(
+              opacity: _animationController,
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF10b981), Color(0xFF06b6d4)],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF10b981).withValues(alpha: 0.3),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.menu_book_rounded,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Academics',
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1a1f3a),
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Manage attendance and academic schedules',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey.shade600,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 36),
+            // Feature Cards Grid
+            LayoutBuilder(
+              builder: (context, constraints) {
+                // Calculate number of columns based on available width
+                int crossAxisCount = 4;
+                if (constraints.maxWidth < 1200) crossAxisCount = 3;
+                if (constraints.maxWidth < 900) crossAxisCount = 2;
+                if (constraints.maxWidth < 600) crossAxisCount = 1;
+
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: 1.6,
+                  ),
+                  itemCount: academicFeatures.length,
+                  itemBuilder: (context, index) {
+                    return _buildAdmissionFeatureCard(
+                      academicFeatures[index],
                       index,
                     );
                   },
