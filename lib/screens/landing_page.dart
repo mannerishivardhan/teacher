@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'new_admission_screen.dart';
+import 'admission_report_screen.dart';
+import 'college_strength_screen.dart';
+import 'detain_rejoin_screen.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -221,8 +225,8 @@ class _LandingPageState extends State<LandingPage>
         color: const Color(0xFF06b6d4),
       ),
       AdmissionFeature(
-        title: 'Detained Students',
-        description: 'Track detained records',
+        title: 'Detain/Rejoin',
+        description: 'Manage detained students',
         icon: Icons.warning_rounded,
         color: const Color(0xFFf59e0b),
       ),
@@ -668,17 +672,47 @@ class _LandingPageState extends State<LandingPage>
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Opening ${feature.title}...'),
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                    if (feature.title == 'New Admission') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NewAdmissionScreen(),
                         ),
-                        backgroundColor: feature.color,
-                        duration: const Duration(seconds: 2),
-                      ),
-                    );
+                      );
+                    } else if (feature.title == 'Admission Report') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AdmissionReportScreen(),
+                        ),
+                      );
+                    } else if (feature.title == 'College Strength') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CollegeStrengthScreen(),
+                        ),
+                      );
+                    } else if (feature.title == 'Detain/Rejoin') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DetainRejoinScreen(),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Opening ${feature.title}...'),
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          backgroundColor: feature.color,
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                    }
                   },
                   splashColor: feature.color.withValues(alpha: 0.1),
                   highlightColor: feature.color.withValues(alpha: 0.05),
