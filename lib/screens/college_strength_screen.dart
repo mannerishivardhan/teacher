@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'college_strength_result_screen.dart';
 
 class CollegeStrengthScreen extends StatefulWidget {
   const CollegeStrengthScreen({super.key});
@@ -93,10 +94,15 @@ class _CollegeStrengthScreenState extends State<CollegeStrengthScreen> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Calculating Strength...'),
-                        behavior: SnackBarBehavior.floating,
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CollegeStrengthResultScreen(
+                          seatType: _seatType,
+                          casteCategory: _casteCategory,
+                          yearOfStudy: _yearOfStudy,
+                          studentType: _studentType,
+                        ),
                       ),
                     );
                   }

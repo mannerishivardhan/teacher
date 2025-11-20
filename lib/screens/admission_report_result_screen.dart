@@ -1,23 +1,70 @@
 import 'package:flutter/material.dart';
 
 class AdmissionReportResultScreen extends StatelessWidget {
-  const AdmissionReportResultScreen({super.key});
+  final String? year;
+  final String? course;
+  final String? branch;
+  final String? section;
+  final String? rollNo;
+  final DateTime? admissionDate;
+  final String? gender;
+  final String? seatType;
+  final String? caste;
+
+  const AdmissionReportResultScreen({
+    super.key,
+    this.year,
+    this.course,
+    this.branch,
+    this.section,
+    this.rollNo,
+    this.admissionDate,
+    this.gender,
+    this.seatType,
+    this.caste,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // Dummy data generation
+    // Dynamic data generation based on filters
     final List<Map<String, String>> reportData = List.generate(
       20,
-      (index) => {
+      (index) {
+        // Use filter values if present, otherwise generate random/default
+        final currentGender = (gender != null && gender != 'All') 
+            ? gender! 
+            : (index % 2 == 0 ? 'Male' : 'Female');
+            
+        final currentCaste = (caste != null && caste != 'All') 
+            ? caste! 
+            : 'OC';
+            
+        final currentSeatType = (seatType != null && seatType != 'All') 
+            ? seatType! 
+            : 'Convener';
+
+        final currentCourse = (course != null && course != 'All') 
+            ? course! 
+            : 'B.Tech';
+
+        final currentBranch = (branch != null && branch != 'All') 
+            ? branch! 
+            : 'CSE';
+
+        final currentYear = (year != null && year != 'All') 
+            ? year! 
+            : '1st Year';
+
+        return {
         'Sl.No': '${index + 1}',
-        'Roll.No': '2023CSE${100 + index}',
+        'Roll.No': rollNo?.isNotEmpty == true ? '$rollNo-${index + 1}' : '2023$currentBranch${100 + index}',
         'Admission.No': 'ADM${2023000 + index}',
         'Student Name': 'Student ${index + 1}',
-        'Gender': index % 2 == 0 ? 'Male' : 'Female',
+        'Gender': currentGender,
         'Blood Group': 'O+',
         'Date Of Birth': '2005-01-15',
         'Category': 'General',
-        'Caste': 'OC',
+        'Caste': currentCaste,
         'Nationality': 'Indian',
         'Religion': 'Hindu',
         'Mother Tongue': 'Telugu',
@@ -25,27 +72,29 @@ class AdmissionReportResultScreen extends StatelessWidget {
         'Entrance Type': 'EAMCET',
         'Hallticket Number': '230510${1000 + index}',
         'Rank': '${1500 + index * 10}',
-        'Joining Date': '2023-08-01',
-        'Seat Type': 'Convener',
+        'Joining Date': admissionDate != null 
+            ? "${admissionDate!.day}/${admissionDate!.month}/${admissionDate!.year}" 
+            : '2023-08-01',
+        'Seat Type': currentSeatType,
         'Admission Type': 'Regular',
         'Mobile No.': '98765432${10 + index}',
         'ScholarShip': 'Yes',
         'Email': 'student${index + 1}@example.com',
         'Distance From Residence': '15 km',
-        'Bank A/C No.': '1234567890${index}',
-        'Ration Card No.': 'WAP123456${index}',
-        'Adhar Card No.': '1234 5678 901${index}',
+        'Bank A/C No.': '1234567890$index',
+        'Ration Card No.': 'WAP123456$index',
+        'Adhar Card No.': '1234 5678 901$index',
         'PHC': 'No',
-        'Permanent Address': 'H.No 1-23, Street ${index}, City',
-        'Correspondence Address': 'H.No 1-23, Street ${index}, City',
-        'SSC Hall Ticket.No': '190510${index}',
+        'Permanent Address': 'H.No 1-23, Street $index, City',
+        'Correspondence Address': 'H.No 1-23, Street $index, City',
+        'SSC Hall Ticket.No': '190510$index',
         'SSC Board': 'SSC',
         'SSC Year Of Pass': '2021',
         'SSC Marks': '580',
         'SSC %': '9.8',
         'SSC Institution': 'ZPHS School',
         'SSC Grade Points': '9.8',
-        'Inter Hall Ticket.No': '210510${index}',
+        'Inter Hall Ticket.No': '210510$index',
         'Inter Board': 'BIE',
         'Inter Year Of Pass': '2023',
         'Inter Marks': '980',
@@ -71,6 +120,9 @@ class AdmissionReportResultScreen extends StatelessWidget {
         'Mother Name': 'Mother ${index + 1}',
         'Mother Occupation': 'Housewife',
         'Mother Mobile': '98765432${30 + index}',
+        'Course': currentCourse,
+        'Year': currentYear,
+      };
       },
     );
 
@@ -86,7 +138,7 @@ class AdmissionReportResultScreen extends StatelessWidget {
       'Diploma Year Of Pass', 'Diploma Marks', 'Diploma %', 'Diploma Institution', 'Degree Hall Ticket.No', 
       'Degree Board', 'Degree Year Of Pass', 'Degree Marks', 'Degree %', 'Degree Institution', 
       'Father Name', 'Father Occupation', 'Annucal Income', 'Father Mobile.No', 'Mother Name', 
-      'Mother Occupation', 'Mother Mobile'
+      'Mother Occupation', 'Mother Mobile', 'Course', 'Year'
     ];
 
     return Scaffold(
@@ -129,7 +181,7 @@ class AdmissionReportResultScreen extends StatelessWidget {
                 headingRowColor: WidgetStateProperty.all(const Color(0xFFF8FAFC)),
                 dataRowColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
                   if (states.contains(WidgetState.selected)) {
-                    return Theme.of(context).colorScheme.primary.withOpacity(0.08);
+                    return Theme.of(context).colorScheme.primary.withValues(alpha: 0.08);
                   }
                   return null;
                 }),

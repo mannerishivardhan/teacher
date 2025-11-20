@@ -145,7 +145,7 @@ class _DetainRejoinScreenState extends State<DetainRejoinScreen> {
                     
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Processing ${_actionType} Request...'),
+                        content: Text('Processing $_actionType Request...'),
                         behavior: SnackBarBehavior.floating,
                       ),
                     );

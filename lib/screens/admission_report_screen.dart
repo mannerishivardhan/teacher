@@ -23,6 +23,7 @@ class _AdmissionReportScreenState extends State<AdmissionReportScreen> {
   String? _gender;
   String? _seatType;
   String? _caste;
+  DateTime? _admissionDate;
 
   @override
   void dispose() {
@@ -52,6 +53,7 @@ class _AdmissionReportScreenState extends State<AdmissionReportScreen> {
     );
     if (picked != null) {
       setState(() {
+        _admissionDate = picked;
         _dateController.text = "${picked.day}/${picked.month}/${picked.year}";
       });
     }
@@ -204,7 +206,17 @@ class _AdmissionReportScreenState extends State<AdmissionReportScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const AdmissionReportResultScreen(),
+                        builder: (context) => AdmissionReportResultScreen(
+                          year: _year,
+                          course: _course,
+                          branch: _branch,
+                          section: _section,
+                          rollNo: _rollNoController.text,
+                          admissionDate: _admissionDate,
+                          gender: _gender,
+                          seatType: _seatType,
+                          caste: _caste,
+                        ),
                       ),
                     );
                   }
