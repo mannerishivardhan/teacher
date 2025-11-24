@@ -3,6 +3,11 @@ import 'new_admission_screen.dart';
 import 'admission_report_screen.dart';
 import 'college_strength_screen.dart';
 import 'detain_rejoin_screen.dart';
+import 'attendance_tracking_screen.dart';
+import 'timetable_screen.dart';
+import 'day_attendance_screen.dart';
+import 'attendance_shortage_screen.dart';
+import 'not_posted_faculty_screen.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -354,8 +359,8 @@ class _LandingPageState extends State<LandingPage>
         color: const Color(0xFF6366f1),
       ),
       AdmissionFeature(
-        title: 'Daily Absentees',
-        description: 'View daily absent students',
+        title: 'Not Posted Faculty',
+        description: 'Faculty who haven\'t posted attendance',
         icon: Icons.person_off_rounded,
         color: const Color(0xFFef4444),
       ),
@@ -698,6 +703,41 @@ class _LandingPageState extends State<LandingPage>
                         context,
                         MaterialPageRoute(
                           builder: (context) => const DetainRejoinScreen(),
+                        ),
+                      );
+                    } else if (feature.title == 'Attendance') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AttendanceTrackingScreen(),
+                        ),
+                      );
+                    } else if (feature.title == 'Timetable') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TimetableScreen(),
+                        ),
+                      );
+                    } else if (feature.title == 'Day Attendance') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DayAttendanceScreen(),
+                        ),
+                      );
+                    } else if (feature.title == 'Shortage Check') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AttendanceShortageScreen(),
+                        ),
+                      );
+                    } else if (feature.title == 'Not Posted Faculty') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotPostedFacultyScreen(),
                         ),
                       );
                     } else {
