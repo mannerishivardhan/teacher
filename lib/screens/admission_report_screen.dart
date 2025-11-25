@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'admission_report_result_screen.dart';
+import '../models/admission_report_models.dart';
 
 class AdmissionReportScreen extends StatefulWidget {
   const AdmissionReportScreen({super.key});
@@ -105,6 +106,7 @@ class _AdmissionReportScreenState extends State<AdmissionReportScreen> {
                         ['2023-24', '2024-25', '2025-26'],
                         _year,
                         (val) => setState(() => _year = val),
+                        isRequired: true,
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -114,6 +116,7 @@ class _AdmissionReportScreenState extends State<AdmissionReportScreen> {
                         ['B.Tech', 'M.Tech', 'MBA', 'BBA'],
                         _course,
                         (val) => setState(() => _course = val),
+                        isRequired: true,
                       ),
                     ),
                   ],
@@ -127,6 +130,7 @@ class _AdmissionReportScreenState extends State<AdmissionReportScreen> {
                         ['CSE', 'ECE', 'EEE', 'MECH', 'CIVIL'],
                         _branch,
                         (val) => setState(() => _branch = val),
+                        isRequired: true,
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -155,7 +159,21 @@ class _AdmissionReportScreenState extends State<AdmissionReportScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                _buildTextField('Search by Roll No', _rollNoController),
+                _buildTextField(
+                  'Search by Roll No',
+                  _rollNoController,
+                  validator: (value) {
+                    if (value != null && value.isNotEmpty) {
+                      if (value.length < 4) {
+                        return 'Roll number must be at least 4 characters';
+                      }
+                      if (!RegExp(r'^[A-Z0-9]+$').hasMatch(value)) {
+                        return 'Roll number must contain only uppercase letters and numbers';
+                      }
+                    }
+                    return null;
+                  },
+                ),
                 const SizedBox(height: 16),
                 Row(
                   children: [
@@ -203,19 +221,25 @@ class _AdmissionReportScreenState extends State<AdmissionReportScreen> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    // Create filter object
+                    final filter = AdmissionReportFilter(
+                      year: _year,
+                      course: _course,
+                      branch: _branch,
+                      section: _section,
+                      rollNo: _rollNoController.text.trim(),
+                      admissionDate: _admissionDate,
+                      gender: _gender,
+                      seatType: _seatType,
+                      caste: _caste,
+                    );
+
+                    // Navigate to results screen
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => AdmissionReportResultScreen(
-                          year: _year,
-                          course: _course,
-                          branch: _branch,
-                          section: _section,
-                          rollNo: _rollNoController.text,
-                          admissionDate: _admissionDate,
-                          gender: _gender,
-                          seatType: _seatType,
-                          caste: _caste,
+                          filter: filter,
                         ),
                       ),
                     );
@@ -322,9 +346,15 @@ class _AdmissionReportScreenState extends State<AdmissionReportScreen> {
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller) {
+  Widget _buildTextField(
+    String label,
+    TextEditingController controller, {
+    String? Function(String?)? validator,
+  }) {
     return TextFormField(
       controller: controller,
+      validator: validator,
+      textCapitalization: TextCapitalization.characters,
       decoration: InputDecoration(
         labelText: label,
         labelStyle: TextStyle(color: Colors.grey.shade600),
@@ -341,6 +371,14 @@ class _AdmissionReportScreenState extends State<AdmissionReportScreen> {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFF8b5cf6), width: 2),
         ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFFef4444), width: 1.5),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFFef4444), width: 2),
+        ),
         filled: true,
         fillColor: const Color(0xFFF8FAFC),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -352,8 +390,9 @@ class _AdmissionReportScreenState extends State<AdmissionReportScreen> {
     String label,
     List<String> items,
     String? value,
-    void Function(String?) onChanged,
-  ) {
+    void Function(String?) onChanged, {
+    bool isRequired = false,
+  }) {
     return DropdownButtonFormField<String>(
       value: value,
       items: items.map((item) {
@@ -367,8 +406,16 @@ class _AdmissionReportScreenState extends State<AdmissionReportScreen> {
         );
       }).toList(),
       onChanged: onChanged,
+      validator: isRequired
+          ? (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please select $label';
+              }
+              return null;
+            }
+          : null,
       decoration: InputDecoration(
-        labelText: label,
+        labelText: label + (isRequired ? ' *' : ''),
         labelStyle: TextStyle(color: Colors.grey.shade600, fontSize: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -381,6 +428,14 @@ class _AdmissionReportScreenState extends State<AdmissionReportScreen> {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFF8b5cf6), width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFFef4444), width: 1.5),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFFef4444), width: 2),
         ),
         filled: true,
         fillColor: const Color(0xFFF8FAFC),

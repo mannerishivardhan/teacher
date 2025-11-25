@@ -8,6 +8,9 @@ import 'timetable_screen.dart';
 import 'day_attendance_screen.dart';
 import 'attendance_shortage_screen.dart';
 import 'not_posted_faculty_screen.dart';
+import 'faculty_leisure_screen.dart';
+import 'faculty_timetable_filter_screen.dart';
+import 'faculty_adjustments_filter_screen.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -738,6 +741,27 @@ class _LandingPageState extends State<LandingPage>
                         context,
                         MaterialPageRoute(
                           builder: (context) => const NotPostedFacultyScreen(),
+                        ),
+                      );
+                    } else if (feature.title == 'Faculty Leisure') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FacultyLeisureScreen(),
+                        ),
+                      );
+                    } else if (feature.title == 'Faculty Timetable') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FacultyTimetableFilterScreen(),
+                        ),
+                      );
+                    } else if (feature.title == 'Faculty Adjustments') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FacultyAdjustmentsFilterScreen(),
                         ),
                       );
                     } else {
